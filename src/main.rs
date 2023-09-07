@@ -93,6 +93,7 @@ enum Endpoints {
     HAF,
     HAFAH,
     HIVEMIND,
+    DUMP,
 }
 
 struct APICallResponse {
@@ -109,6 +110,7 @@ impl Endpoints {
             Endpoints::HAF => appdata.config.haf_endpoint.as_str(),
             Endpoints::HAFAH => appdata.config.hafah_endpoint.as_str(),
             Endpoints::HIVEMIND => appdata.config.hivemind_endpoint.as_str(),
+            Endpoints::DUMP => appdata.config.dump_endpoint.as_str(),
         }
     }
 }
@@ -132,6 +134,8 @@ async fn handle_request(
     let method = request.method.as_str();
     // Pick the endpoints depending on the method.
     let endpoints = match method {
+        //Stuff to dump cause it's bad
+        "condenser_api.broadcast_transaction_synchronous" => Endpoints::DUMP,
         // HAF
         "condenser_api.get_block" => Endpoints::HAF,
         "block_api.get_block_range" => Endpoints::HAF,
@@ -358,6 +362,7 @@ struct DroneConfig {
     haf_endpoint: String,
     hafah_endpoint: String,
     hivemind_endpoint: String,
+    dump_endpoint: String,
     middleware_connection_threads: usize,
 }
 
